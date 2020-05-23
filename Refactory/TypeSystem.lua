@@ -43,8 +43,8 @@ _下划线前水为私有字段，私有字段，私有函数，只能由实例�
 local _CHECK_MODE = true -- 启动强制检查机制，及时发现代码问题，但会有运行性能损耗
 
 local error = error
--- local print = print
-local print = function()end
+local print = print
+-- local print = function()end
 
 -- 辅助函数
 local function _copyTable(to, from)
@@ -591,6 +591,9 @@ end
 function typesys.__getObjMetatable()
 	return _obj_mt
 end
+function typesys.__getAllTypesInfo()
+	return _type_info_map
+end
 
 -- 类型定义语法糖，用于实现typesys.def.XXX语法
 -- 此语法可以将XXX作为name传递给__index函数，而t就是typesys
@@ -606,6 +609,9 @@ typesys.def = setmetatable({}, {
 		return new_t
 	end
 })
+
+-- 统一扩展工具的函数放置位置
+typesys.tools = {}
 
 -- 禁止typesys添加或访问不存在的字段
 setmetatable(typesys, {
