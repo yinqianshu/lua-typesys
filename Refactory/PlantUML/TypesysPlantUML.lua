@@ -88,24 +88,36 @@ local function _typeInfoToArray(type_info_map, t, a)
 
 	return a
 end
-local function _typeRelationshipToArray(type_info_map, t, a)
+local function _typeRelationshipToArray(type_info_map, t, a, all_relationship_map)
 	a = a or {}
 
 	local type_name = t.__type_name
 
 	-- inherit
 	if nil ~= t.__super then
-		_arrayPush(a, string.format("%s <|-- %s ", t.__super.__type_name, type_name))
+		local rel = string.format("%s <|-- %s ", t.__super.__type_name, type_name)
+		if nil == all_relationship_map[rel] then
+			all_relationship_map[rel] = true
+			_arrayPush(a, rel)
+		end
 	end
 
 	-- dependency
 	local ref_fields = _getSelfFields(type_info_map, t, "ref")
 	for k, v in pairs(ref_fields) do
-		_arrayPush(a, string.format("%s --> %s", type_name, v.__type_name))
+		local rel = string.format("%s --> %s", type_name, v.__type_name)
+		if nil == all_relationship_map[rel] then
+			all_relationship_map[rel] = true
+			_arrayPush(a, rel)
+		end
 	end
 	local w_ref_fields = _getSelfFields(type_info_map, t, "w_ref")
 	for k, v in pairs(w_ref_fields) do
-		_arrayPush(a, string.format("%s ..> %s : weak", type_name, v.__type_name))
+		local rel = string.format("%s ..> %s : weak", type_name, v.__type_name)
+		if nil == all_relationship_map[rel] then
+			all_relationship_map[rel] = true
+			_arrayPush(a, rel)
+		end
 	end
 
 	return a
@@ -117,13 +129,15 @@ typesys.tools.toPlantUML = function(file_path)
 	    return false
 	end
 
+	local all_relationship_map = {}
+
 	local text_array = {}
 	_arrayPush(text_array, "@startuml")
 
 	local type_info_map = typesys.__getAllTypesInfo()
 	for t,_ in pairs(type_info_map) do
 		_typeInfoToArray(type_info_map, t, text_array)
-		_typeRelationshipToArray(type_info_map, t, text_array)
+		_typeRelationshipToArray(type_info_map, t, text_array, all_relationship_map)
 	end
 
 	_arrayPush(text_array, "@enduml")
