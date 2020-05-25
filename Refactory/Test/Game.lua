@@ -224,16 +224,28 @@ end
 
 ----------------------
 
-local seed = tostring(os_time()):reverse():sub(1, 7)
-randomseed(seed)
-print("冒险者："..seed)
+-- true：生成puml脚本
+local generate_puml = false
 
-local sapce_size = 20
-local goal_bonus = 9527
-local chance = 3
-local game = new(Game, sapce_size, random(sapce_size), goal_bonus, chance)
-setRootObject(game) -- 非常重要：game对象不会被gc掉
-while game:loop() do gc() end
-setRootObject(nil)
-game = nil
+if not generate_puml then
+    local seed = tostring(os_time()):reverse():sub(1, 7)
+	randomseed(seed)
+	print("冒险者："..seed)
+
+	local sapce_size = 20
+	local goal_bonus = 9527
+	local chance = 3
+	local game = new(Game, sapce_size, random(sapce_size), goal_bonus, chance)
+	setRootObject(game) -- 非常重要：game对象不会被gc掉
+	while game:loop() do gc() end
+	setRootObject(nil)
+	game = nil
+else
+	package.path = package.path ..';../PlantUML/?.lua'
+    require("TypesysPlantUML")
+    local toPlantUMLSucceed = typesys.tools.toPlantUML("Game.puml")
+    print("to plantuml: "..tostring(toPlantUMLSucceed).."\n")
+end
+
+
 

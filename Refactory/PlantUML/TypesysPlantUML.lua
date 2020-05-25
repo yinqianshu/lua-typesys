@@ -40,46 +40,46 @@ local function _typeInfoToArray(type_info_map, t, a)
 	-- fields
 	local num_fields = _getSelfFields(type_info_map, t, "num")
 	for k, v in pairs(num_fields) do
-		_arrayPush(a, string.format("%s%s : number | %d", _getFieldAuthority(k), k, v))
+		_arrayPush(a, string.format("\t%s%s : number | %d", _getFieldAuthority(k), k, v))
 	end
 	local str_fields = _getSelfFields(type_info_map, t, "str")
 	for k, v in pairs(str_fields) do
-		_arrayPush(a, string.format("%s%s : string | \"%s\"", _getFieldAuthority(k), k, v))
+		_arrayPush(a, string.format("\t%s%s : string | \"%s\"", _getFieldAuthority(k), k, v))
 	end
 	local bool_fields = _getSelfFields(type_info_map, t, "bool")
 	for k, v in pairs(bool_fields) do
-		_arrayPush(a, string.format("%s%s : boolean | %s", _getFieldAuthority(k), k, tostring(v)))
+		_arrayPush(a, string.format("\t%s%s : boolean | %s", _getFieldAuthority(k), k, tostring(v)))
 	end
 	local ref_fields = _getSelfFields(type_info_map, t, "ref")
 	for k, v in pairs(ref_fields) do
-		_arrayPush(a, string.format("%s%s : %s", _getFieldAuthority(k), k, v.__type_name))
+		_arrayPush(a, string.format("\t%s%s : %s", _getFieldAuthority(k), k, v.__type_name))
 	end
 	local w_ref_fields = _getSelfFields(type_info_map, t, "w_ref")
 	for k, v in pairs(w_ref_fields) do
-		_arrayPush(a, string.format("%s%s : %s[weak]", _getFieldAuthority(k), k, v.__type_name))
+		_arrayPush(a, string.format("\t%s%s : %s[weak]", _getFieldAuthority(k), k, v.__type_name))
 	end
 	local unmanaged_fields = _getSelfFields(type_info_map, t, "unmanaged")
 	for k, v in pairs(unmanaged_fields) do
-		_arrayPush(a, string.format("%s%s : unmanaged", _getFieldAuthority(k), k))
+		_arrayPush(a, string.format("\t%s%s : unmanaged", _getFieldAuthority(k), k))
 	end
 
 	-- functions & static
 	for k, v in pairs(t) do
 		local v_type = type(v)
 		if "function" == v_type then
-			_arrayPush(a, string.format("%s%s()", _getFieldAuthority(k), k))
+			_arrayPush(a, string.format("\t%s%s()", _getFieldAuthority(k), k))
 		elseif "number" == v_type then
-			_arrayPush(a, string.format("{static} %s%s : number | %d", _getFieldAuthority(k), k, v))
+			_arrayPush(a, string.format("\t{static} %s%s : number | %d", _getFieldAuthority(k), k, v))
 		elseif "string" == v_type then
-			_arrayPush(a, string.format("{static} %s%s : string | \"%s\"", _getFieldAuthority(k), k, v))
+			_arrayPush(a, string.format("\t{static} %s%s : string | \"%s\"", _getFieldAuthority(k), k, v))
 		elseif "boolean" == v_type then
-			_arrayPush(a, string.format("{static} %s%s : boolean | %s", _getFieldAuthority(k), k, tostring(v)))
+			_arrayPush(a, string.format("\t{static} %s%s : boolean | %s", _getFieldAuthority(k), k, tostring(v)))
 		elseif "table" == v_type then
 			local sys_type_info = type_info_map[v]
 			if nil ~= sys_type_info then
-				_arrayPush(a, string.format("{static} %s%s : %s", _getFieldAuthority(k), k, v.__type_name))
+				_arrayPush(a, string.format("\t{static} %s%s : %s", _getFieldAuthority(k), k, v.__type_name))
 			else
-				_arrayPush(a, string.format("{static} %s%s : table", _getFieldAuthority(k), k))
+				_arrayPush(a, string.format("\t{static} %s%s : table", _getFieldAuthority(k), k))
 			end
 		end
 	end

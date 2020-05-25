@@ -1,0 +1,70 @@
+@startuml
+class SpectialBonusBox {
+	-_chance : number | 0
+	+getChance()
+	{static} -__type_name : string | "SpectialBonusBox"
+	-__ctor()
+	{static} -__super : BonusBox
+}
+BonusBox <|-- SpectialBonusBox 
+class array {
+	-_et_type : number | 0
+	-_a : unmanaged
+	-_et : unmanaged
+	+get()
+	+popBack()
+	-__dtor()
+	+set()
+	+popFront()
+	+size()
+	+pushBack()
+	+insert()
+	-__ctor()
+	+peekFront()
+	+clear()
+	{static} -__type_name : string | "array"
+	+pushFront()
+	+peekBack()
+}
+class BonusBox {
+	-_bonus : number | 0
+	-_open_times : number | 0
+	+getChance()
+	{static} -__type_name : string | "BonusBox"
+	-__ctor()
+	+open()
+}
+class Game {
+	-_rest_chance : number | 0
+	-_pos : number | 1
+	-_goal_bonus : number | 0
+	+exit : boolean | false
+	-_opened_pos_map : map
+	-_space : array
+	+loop()
+	-__ctor()
+	-_tryMove()
+	-_checkChance()
+	{static} -__type_name : string | "Game"
+	-_tryOpen()
+	-_start()
+}
+Game --> map
+Game --> array
+class map {
+	-_et_type : number | 0
+	-_kt : string | ""
+	-_m : unmanaged
+	-_et : unmanaged
+	+get()
+	-__dtor()
+	+set()
+	+containKey()
+	-__ctor()
+	+pairs()
+	+isEmpty()
+	{static} -__type_name : string | "map"
+	+clear()
+	-_next()
+}
+@enduml
